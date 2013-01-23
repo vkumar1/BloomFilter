@@ -1,0 +1,57 @@
+/***********************************
+author: Vimal Kumar
+desc: Bloom Filter Module file
+***********************************/
+#include "BF.h"
+#define HASHSIZE 20
+module ESCDC @safe()
+{
+	 uses interface Timer<TMilli> as Timer0;
+	 uses interface Leds;
+	 uses interface Boot;
+	 uses interface SHA1;
+	 //uses interface Receive;
+    	 //uses interface AMSend;
+	 //uses interface SplitControl as AMControl;
+	 //uses interface Packet;
+}
+implementation
+{
+	uint8_t BFlength = M/8;	
+	uint8_t BFilter[BFlength];
+	uint8_t input[HASHSIZE];
+	uint8_t output[HASHSIZE];
+	void createHash()
+	{
+		call SHA1.reset(&context);
+		call SHA1.update(&context, input, HASHSIZE);
+		call SHA1.digest(&context, output);
+	}
+	void mapToBF()
+	{
+		uint8_t byteNum;
+		uint8_t bitNum;
+		uint8_t mapbit;
+		uint8_t i = 0;
+		for( i = 0;i < HASHSIZE; i++)
+		{
+			byteNum = output[i]/8;
+			bitNum = output[i]%8;
+			mapbit = 0x80;
+			mapBit = mapBit >> bitNum;
+		}
+	}
+	void init()
+	{
+		uint8_t i =0;
+		for(i = 0; i < BFlength; i++)
+		{
+			BFilter[i] = 0;
+		}
+	}
+	void Boot.booted()
+	{
+		createHash();
+	}
+	
+}
