@@ -1,0 +1,3 @@
+COMPONENT=BFAppC
+include $(MAKERULES)
+
